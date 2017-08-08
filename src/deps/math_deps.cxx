@@ -57,8 +57,8 @@ Local<Number> add (const FunctionCallbackInfo<Value>& args){
 //////////////
 
 double subtractAll (const FunctionCallbackInfo<Value>& args){
-  double value = 0;
-  for(int i = 0; i<args.Length(); ++i)
+  double value = args[0]->NumberValue;
+  for(int i = 1; i<args.Length(); ++i)
     value -= args[i]->NumberValue();
   return value;
 }
