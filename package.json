@@ -1,0 +1,17 @@
+{
+  "name": "nodecpp-test",
+  "version": "1.0.0",
+  "description": "Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "author": "William",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wzhouwzhou/nodecpp-test.git"
+  },
+  "gypfile": true
+}
