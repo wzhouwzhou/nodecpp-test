@@ -1,6 +1,6 @@
 // math.cc
 #include <node.h>
-#include "../headers/math_deps.h"
+#include "math_deps.h"
 #include <iostream>
 
 namespace math {
