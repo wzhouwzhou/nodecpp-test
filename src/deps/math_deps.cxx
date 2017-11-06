@@ -1,6 +1,8 @@
 #include <node.h>
 #include <iostream>
 #include <chrono>
+#include <vector>
+
 struct MeasureTime {
   using precision = std::chrono::nanoseconds;
   std::vector<std::chrono::steady_clock::time_point> times;
