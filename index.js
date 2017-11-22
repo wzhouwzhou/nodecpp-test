@@ -2,5 +2,16 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const R = './build/Release/';
-exports.math = require(R+'math');
-exports.hello = require(R+'hello');
+
+Object.defineProperty(exports, 'mathp', { value: `${R}math` });
+Object.defineProperty(exports, 'hellop', { value: `${R}hello` });
+Object.defineProperty(exports, 'arraysp', { value: `${R}arrays` });
+
+delete require.cache[require.resolve(exports.mathp)];
+exports.math = require(exports.mathp);
+
+delete require.cache[require.resolve(exports.hellop)];
+exports.hello = require(exports.hellop);
+
+delete require.cache[require.resolve(exports.arraysp)];
+exports.arrays = require(exports.arraysp);

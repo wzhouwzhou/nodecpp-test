@@ -1,14 +1,14 @@
 {
   "name": "nodecpp-test",
-  "version": "1.0.0",
-  "description": "Test",
+  "version": "1.1.0",
+  "description": "Some utilities written in c++",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "node-gyp rebuild"
   },
-  "author": "William",
-  "license": "MIT",
+  "author": "William Zhou",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wzhouwzhou/nodecpp-test.git"
