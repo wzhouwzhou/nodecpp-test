@@ -37,7 +37,7 @@ Local<Array> shuffle(Local<Array> arr, bool b = true) {
 
 Local<Value> sample(Local<Array> array) {
   random_device rd;
-  mt19937_64 mt(rd());
+  mt19937 mt(rd());
   uniform_int_distribution<> dis(0, array->Length() - 1);
   return array->Get(dis(mt));
 }
