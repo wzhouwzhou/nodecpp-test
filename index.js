@@ -15,5 +15,15 @@ exports.hello = require(exports.hellop);
 
 delete require.cache[require.resolve(exports.arraysp)];
 const { ArrayUtil } = require(exports.arraysp);
+const AU_default = ArrayUtil(!0);
+Object.defineProperty(ArrayUtil, 'sample', {
+  value: AU_default.sample.bind(this && this.constructor === ArrayUtil ? this : AU_default),
+  enumerable: !0,
+});
+Object.defineProperty(ArrayUtil, 'shuffle', {
+  value: AU_default.shuffle.bind(this && this.constructor === ArrayUtil ? this : AU_default),
+  enumerable: !0,
+});
+
 exports.ArrayUtil = ArrayUtil;
 exports.arrays = ArrayUtil;
