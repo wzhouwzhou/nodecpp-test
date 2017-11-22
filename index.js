@@ -14,4 +14,6 @@ delete require.cache[require.resolve(exports.hellop)];
 exports.hello = require(exports.hellop);
 
 delete require.cache[require.resolve(exports.arraysp)];
-exports.arrays = require(exports.arraysp);
+const { ArrayUtil } = require(exports.arraysp);
+exports.ArrayUtil = ArrayUtil;
+exports.arrays = ArrayUtil;

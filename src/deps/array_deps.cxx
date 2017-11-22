@@ -1,14 +1,14 @@
 #include <node.h>
-#include <math.h>
-#include <vector>
-#include <iostream>
-
-#include <algorithm>
-#include <iterator>
 #include <random>
 
-using namespace v8;
-using namespace std;
+using v8::Local;
+using v8::Array;
+using v8::Isolate;
+using v8::Value;
+
+using std::random_device;
+using std::mt19937;
+using std::uniform_int_distribution;
 
 Local<Array> shuffle(Local<Array> arr, bool b = true) {
   random_device rd;
@@ -33,4 +33,11 @@ Local<Array> shuffle(Local<Array> arr, bool b = true) {
   }
 
   return array;
+}
+
+Local<Value> sample(Local<Array> array) {
+  random_device rd;
+  mt19937_64 mt(rd());
+  uniform_int_distribution<> dis(0, array->Length() - 1);
+  return array->Get(dis(mt));
 }
