@@ -30,7 +30,9 @@
             "sources": [
                 "src/export/arrays.cc",
                 "src/deps/array_deps.cxx",
-                "src/proto_objects/ArrayUtil.cpp"
+                "src/proto_objects/ArrayUtil.cpp",
+                "src/headers/arrays.h",
+                "src/headers/arrayutil.hpp"
             ],
             "defines": [
                 'DEBUG="<!(echo $DEBUG)"'

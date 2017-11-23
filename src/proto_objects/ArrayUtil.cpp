@@ -1,6 +1,7 @@
 // ArrayUtil.cpp
 #include "arrays.h"
 #include "arrayutil.hpp"
+#include "math_deps.h"
 
 namespace arrays {
 
@@ -77,6 +78,10 @@ void ArrayUtil::Shuffle(const FunctionCallbackInfo<Value>& args) {
 
   args.GetReturnValue().Set(shuffle(Local<Array>::Cast(args[0]),
     args[1]->IsUndefined() ? obj->safe_ : args[1]->BooleanValue()));
+}
+
+void ArrayUtil::SumAll(const FunctionCallbackInfo<Value>& args) {
+  args.GetReturnValue().Set(add(args));
 }
 
 }  // namespace arrays

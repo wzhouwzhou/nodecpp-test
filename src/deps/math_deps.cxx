@@ -12,6 +12,7 @@ using v8::Object;
 using v8::String;
 using v8::Value;
 using v8::Function;
+using v8::Array;
 
 bool checkArgsL (const int l, Isolate* isolate, const FunctionCallbackInfo<Value>& args){
   if (args.Length() < l) {
@@ -21,13 +22,13 @@ bool checkArgsL (const int l, Isolate* isolate, const FunctionCallbackInfo<Value
   }
 
   for(int i = 0; i<args.Length()-1; i++)
-    if(!args[i]->IsNumber()){
+    if(!args[i]->IsNumber() && !args[i]->IsArray()){
       isolate->ThrowException(Exception::TypeError(
           String::NewFromUtf8(isolate, "Wrong arguments")));
       return false;
     }
 
-  if(!args[args.Length()-1]->IsNumber() && !args[args.Length()-1]->IsFunction()) return false;
+  if(!args[args.Length()-1]->IsNumber() && !args[args.Length()-1]->IsArray() && !args[args.Length()-1]->IsFunction()) return false;
 
   return true;
 }
@@ -40,11 +41,22 @@ bool checkArgs (Isolate* isolate, const FunctionCallbackInfo<Value>& args){
 // Add //
 /////////
 
-double addAll (const FunctionCallbackInfo<Value>& args, bool l = false){
+double addRecurse (Local<Value> el, double sum = 0.0) {
+  if (el->IsNumber()) {
+    sum += el->NumberValue();
+  } else if (el->IsArray()) {
+    Local<Array> a = Local<Array>::Cast(el);
+    for (unsigned int i = 0; i < a->Length(); ++i)
+      sum += addRecurse(a->Get(i));
+  }
+  return sum;
+}
+
+double addAll (const FunctionCallbackInfo<Value>& args, bool l = false) {
   double value = 0;
   int m = l ? args.Length() - 1 : args.Length();
   for(int i = 0; i < m; ++i)
-    value += args[i]->NumberValue();
+    value = addRecurse(args[i], value);
   return value;
 }
 
