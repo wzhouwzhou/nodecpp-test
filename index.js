@@ -24,6 +24,5 @@ Object.defineProperty(ArrayUtil, 'shuffle', {
   value: AU_default.shuffle.bind(this && this.constructor === ArrayUtil ? this : AU_default),
   enumerable: !0,
 });
-
-exports.ArrayUtil = ArrayUtil;
+Object.defineProperty(exports, 'ArrayUtil', { value: ArrayUtil });
 exports.arrays = ArrayUtil;
