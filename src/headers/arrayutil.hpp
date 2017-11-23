@@ -1,6 +1,6 @@
 // arrayutil.hpp
-#ifndef ARRAYUTIL_H
-#define ARRAYUTIL_H
+#ifndef ARRAYUTIL_HPP
+#define ARRAYUTIL_HPP
 
 #include <node.h>
 #include <node_object_wrap.h>
@@ -13,6 +13,7 @@ class ArrayUtil : public node::ObjectWrap {
   static void Init(v8::Local<v8::Object> exports);
   static void Shuffle(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void Sample(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void SumAll(const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:
   explicit ArrayUtil(bool safe);

@@ -2,8 +2,17 @@
 #include <node.h>
 #include "math_deps.h"
 #include <iostream>
+#include <regex>
 
 namespace math {
+
+
+using std::cout;
+using std::string;
+using std::getenv;
+using std::regex;
+using std::smatch;
+using std::regex_search;
 
 using v8::FunctionCallbackInfo;
 using v8::Local;
@@ -21,14 +30,32 @@ void Round(const FunctionCallbackInfo<Value>& args) {
 }
 void Init(Local<Object> exports) {
   NODE_SET_METHOD(exports, "add", Add);
-  std::cout<<"Add Initiated!\n";
   NODE_SET_METHOD(exports, "subtract", Subtract);
-  std::cout<<"Subtract Initiated!\n";
   NODE_SET_METHOD(exports, "round", Round);
-  std::cout<<"Round Initiated!\n";
-  std::cout << "\033[1;31mMath Initiated!\033[0m\n";
+
+  if (const char* env_d = getenv("DEBUG")) {
+    regex all ("(,|\\s|^)+(\\*)(,|\\s|$)+");
+    regex nocpputil ("(,|\\s|^)+(-cpputilities)(\\b|,|\\s|$)+");
+    regex cpputil ("(,|\\s|^)+(cpputilities(\\.|::?)?\\*?)(,|\\s|$)+");
+    regex mathutil ("(,|\\s|^)+(cpputilities(\\.|::?)maths(\\.|::?)?\\*?)(,|\\s|$)+");
+
+    string d(env_d);
+    smatch m;
+
+    if (regex_search (d, m, all) ||
+      (
+        !regex_search (d, m, nocpputil) &&
+        (
+          regex_search (d, m, cpputil) ||
+          regex_search (d, m, mathutil)
+        )
+      )) {
+      cout << "\033[1;31mMath Initiated!\033[0m\n";
+    }
+  }
 }
 
 NODE_MODULE(addon, Init)
+
 
 }  // namespace math

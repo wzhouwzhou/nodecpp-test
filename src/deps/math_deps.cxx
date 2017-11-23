@@ -1,30 +1,7 @@
 #include <node.h>
 #include <iostream>
-#include <chrono>
-#include <vector>
 
-struct MeasureTime {
-  using precision = std::chrono::nanoseconds;
-  std::vector<std::chrono::steady_clock::time_point> times;
-  std::chrono::steady_clock::time_point oneLast;
-  void p() {
-    std::cout << "Execution speed (nanoseconds): "
-              << std::chrono::duration_cast<precision>(times.back() - oneLast).count()
-              << "\n";
-  }
-  void m() {
-    oneLast = times.back();
-    times.push_back(std::chrono::steady_clock::now());
-  }
-  void t() {
-    m();
-    p();
-    m();
-  }
-  MeasureTime() {
-    times.push_back(std::chrono::steady_clock::now());
-  }
-};
+#include "timings.hpp"
 
 using v8::Exception;
 using v8::FunctionCallbackInfo;
@@ -34,6 +11,7 @@ using v8::Number;
 using v8::Object;
 using v8::String;
 using v8::Value;
+using v8::Function;
 
 bool checkArgsL (const int l, Isolate* isolate, const FunctionCallbackInfo<Value>& args){
   if (args.Length() < l) {
@@ -42,12 +20,15 @@ bool checkArgsL (const int l, Isolate* isolate, const FunctionCallbackInfo<Value
     return false;
   }
 
-  for(int i = 0; i<args.Length(); i++)
+  for(int i = 0; i<args.Length()-1; i++)
     if(!args[i]->IsNumber()){
       isolate->ThrowException(Exception::TypeError(
           String::NewFromUtf8(isolate, "Wrong arguments")));
       return false;
     }
+
+  if(!args[args.Length()-1]->IsNumber() && !args[args.Length()-1]->IsFunction()) return false;
+
   return true;
 }
 
@@ -59,21 +40,35 @@ bool checkArgs (Isolate* isolate, const FunctionCallbackInfo<Value>& args){
 // Add //
 /////////
 
-double addAll (const FunctionCallbackInfo<Value>& args){
+double addAll (const FunctionCallbackInfo<Value>& args, bool l = false){
   double value = 0;
-  for(int i = 0; i<args.Length(); ++i)
+  int m = l ? args.Length() - 1 : args.Length();
+  for(int i = 0; i < m; ++i)
     value += args[i]->NumberValue();
   return value;
 }
 
 Local<Number> add (const FunctionCallbackInfo<Value>& args){
-  MeasureTime m;
   Isolate* isolate = args.GetIsolate();
   if(checkArgs(isolate, args)){
-    double result = addAll(args);
-    std::cout<<"Debug: "<<"Math: Add: "<<result<<"\n";
-    m.t();
-    return Number::New(isolate, result);
+    bool useTime = false;
+    if(args[args.Length()-1]->IsFunction()) useTime = true;
+    if(useTime){
+      MeasureTime m;
+
+      const unsigned argc = 1;
+
+      double result = addAll(args, true);
+      std::cout<<"Debug: "<<"Math: Add: "<<result<<" | ";
+      Local<Value> argv[argc] = { String::NewFromUtf8(isolate, m.t()) };
+      Local<Function> cb = Local<Function>::Cast(args[args.Length()-1]);
+
+      cb->Call(Null(isolate), argc, argv);
+
+      return Number::New(isolate, result);
+    } else {
+      return Number::New(isolate, addAll(args));
+    }
   }
 
   return Number::New(isolate, -1);
@@ -83,21 +78,35 @@ Local<Number> add (const FunctionCallbackInfo<Value>& args){
 // Subtract //
 //////////////
 
-double subtractAll (const FunctionCallbackInfo<Value>& args){
+double subtractAll (const FunctionCallbackInfo<Value>& args, bool l = false){
   double value = args[0]->NumberValue();
-  for(int i = 1; i<args.Length(); ++i)
+  int m = l ? args.Length() - 1 : args.Length();
+  for(int i = 0; i < m; ++i)
     value -= args[i]->NumberValue();
   return value;
 }
 
 Local<Number> subtract (const FunctionCallbackInfo<Value>& args){
-  MeasureTime m;
   Isolate* isolate = args.GetIsolate();
   if(checkArgs(isolate, args)){
-    double result = subtractAll(args);
-    std::cout<<"Debug: "<<"Math: Subtract: "<<result<<"\n";
-    m.t();
-    return Number::New(isolate, result);
+    bool useTime = false;
+    if(args[args.Length()-1]->IsFunction()) useTime = true;
+    if(useTime){
+      MeasureTime m;
+
+      const unsigned argc = 1;
+
+      double result = subtractAll(args, true);
+      std::cout<<"Debug: "<<"Math: Subtract: "<<result<<" | ";
+      Local<Value> argv[argc] = { String::NewFromUtf8(isolate, m.t()) };
+      Local<Function> cb = Local<Function>::Cast(args[args.Length()-1]);
+
+      cb->Call(Null(isolate), argc, argv);
+
+      return Number::New(isolate, result);
+    } else {
+      return Number::New(isolate, subtractAll(args));
+    }
   }
 
   return Number::New(isolate, -1);
