@@ -1,4 +1,4 @@
-// arrayutil.h
+// arrayutil.hpp
 #ifndef ARRAYUTIL_H
 #define ARRAYUTIL_H
 

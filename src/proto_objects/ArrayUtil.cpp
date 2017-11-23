@@ -1,4 +1,4 @@
-// ArrayUtil.cc
+// ArrayUtil.cpp
 #include "arrays.h"
 #include "arrayutil.hpp"
 
