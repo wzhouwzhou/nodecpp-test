@@ -35,6 +35,8 @@ void ArrayUtil::Init(Local<Object> exports) {
 
   NODE_SET_PROTOTYPE_METHOD(tpl, "shuffle", Shuffle);
   NODE_SET_PROTOTYPE_METHOD(tpl, "sample", Sample);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "dot", Dot);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "sumAll", SumAll);
   // NODE_SET_STATIC_METHOD(tpl, "ssample", Sample);
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "ArrayUtil"), tpl->GetFunction());
@@ -82,6 +84,21 @@ void ArrayUtil::Shuffle(const FunctionCallbackInfo<Value>& args) {
 
 void ArrayUtil::SumAll(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(add(args));
+}
+
+void ArrayUtil::Dot(const FunctionCallbackInfo<Value>& args) {
+  Local<Array> array, array2;
+  array = Local<Array>::Cast(args[0]);
+  if (args.Length() == 1) {
+    array2 = array;
+  } else {
+    Local<Value> temp = args[1];
+    if(temp->IsNull() || temp->IsUndefined())
+      array2 = array;
+    else
+      array2 = Local<Array>::Cast(args[1]);
+  }
+  args.GetReturnValue().Set(dot(array, array2));
 }
 
 }  // namespace arrays
