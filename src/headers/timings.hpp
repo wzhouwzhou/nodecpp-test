@@ -1,4 +1,4 @@
-// math_deps.h
+// timings.hpp
 
 #ifndef TIMINGS_HPP
 #define TIMINGS_HPP
