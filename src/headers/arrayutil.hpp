@@ -15,6 +15,8 @@ class ArrayUtil : public node::ObjectWrap {
   static void Sample(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void SumAll(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void Dot(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void DotExp(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void DotExpNative(const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:
   explicit ArrayUtil(bool safe);
