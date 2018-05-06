@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "node index.js",
-    "install": "node-gyp rebuild -j 6"
+    "clean-curlpp": "rm -rf ./lib/curlpp-0.8.1/build; mkdir ./lib/curlpp-0.8.1/build;",
+    "build-curlpp": "cd ./lib/curlpp-0.8.1/build && cmake .. && make -j 16;",
+    "prep": "npm run clean-curlpp; npm run build-curlpp",
+    "build": "node-gyp rebuild -j 16",
+    "install": "npm run prep; npm run build;"
   },
   "author": "William Zhou",
   "license": "SEE LICENSE IN LICENSE",

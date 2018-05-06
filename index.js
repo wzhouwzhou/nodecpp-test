@@ -57,3 +57,5 @@ Object.defineProperties(ArrayUtil, {
 
 Object.defineProperty(exports, 'ArrayUtil', { value: ArrayUtil });
 exports.arrays = ArrayUtil;
+
+exports.curlpp = require('./build/Release/curlpp.node')
