@@ -49,6 +49,15 @@ Object.defineProperties(ArrayUtil, {
     },
     enumerable: !0,
   },
+  'inverse': {
+    value: (...args) => {
+      M.set();
+      const v = AU_default.nativeinverse.bind(this && this.constructor === ArrayUtil ? this : AU_default)(...args);
+      console.log(M.report());
+      return v;
+    },
+    enumerable: !0,
+  },
   'generate_diag_mat': {
     value: (x = 2, n = 100) => [...new Array(n)].map(() => ([...new Array(n).fill(0)])).map((row, i) => (row[i] = x, row)),
     enumerable: !0,
