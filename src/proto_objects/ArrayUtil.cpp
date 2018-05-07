@@ -37,6 +37,7 @@ void ArrayUtil::Init(Local<Object> exports) {
   NODE_SET_PROTOTYPE_METHOD(tpl, "sumAll", SumAll);
   NODE_SET_PROTOTYPE_METHOD(tpl, "dotexp", DotExp);
   NODE_SET_PROTOTYPE_METHOD(tpl, "nativedotexp", DotExpNative);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "nativeinverse", InverseNative);
   // NODE_SET_STATIC_METHOD(tpl, "ssample", Sample);
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "ArrayUtil"), tpl->GetFunction());
@@ -110,6 +111,11 @@ void ArrayUtil::DotExpNative(const FunctionCallbackInfo<Value>& args) {
   Local<Array> array = Local<Array>::Cast(args[0]);
   int power = args[1]->Int32Value();
   args.GetReturnValue().Set(nativedotexp(array, power));
+}
+
+void ArrayUtil::InverseNative(const FunctionCallbackInfo<Value>& args) {
+  Local<Array> array = Local<Array>::Cast(args[0]);
+  args.GetReturnValue().Set(nativeinverse(array));
 }
 
 }  // namespace arrays
