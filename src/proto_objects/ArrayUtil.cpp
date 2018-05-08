@@ -38,6 +38,7 @@ void ArrayUtil::Init(Local<Object> exports) {
   NODE_SET_PROTOTYPE_METHOD(tpl, "dotexp", DotExp);
   NODE_SET_PROTOTYPE_METHOD(tpl, "nativedotexp", DotExpNative);
   NODE_SET_PROTOTYPE_METHOD(tpl, "nativeinverse", InverseNative);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "wrapped_inv_exp_length_mat", WrappedInvExpLengthMat);
   // NODE_SET_STATIC_METHOD(tpl, "ssample", Sample);
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "ArrayUtil"), tpl->GetFunction());
@@ -98,7 +99,7 @@ void ArrayUtil::Dot(const FunctionCallbackInfo<Value>& args) {
     else
       array2 = Local<Array>::Cast(args[1]);
   }
-  args.GetReturnValue().Set(dot(array, array2));
+  args.GetReturnValue().Set(native_export_dot(array, array2));
 }
 
 void ArrayUtil::DotExp(const FunctionCallbackInfo<Value>& args) {
@@ -116,6 +117,11 @@ void ArrayUtil::DotExpNative(const FunctionCallbackInfo<Value>& args) {
 void ArrayUtil::InverseNative(const FunctionCallbackInfo<Value>& args) {
   Local<Array> array = Local<Array>::Cast(args[0]);
   args.GetReturnValue().Set(nativeinverse(array));
+}
+
+void ArrayUtil::WrappedInvExpLengthMat(const FunctionCallbackInfo<Value>& args) {
+  Local<Array> array = Local<Array>::Cast(args[0]);
+  args.GetReturnValue().Set(wrapped_inv_exp_length_mat(array));
 }
 
 }  // namespace arrays
