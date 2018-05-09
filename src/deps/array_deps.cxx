@@ -87,7 +87,7 @@ vector<vector<double> > nativeDot(vector<vector<double> > arr1, vector<vector<do
 
 vector<vector<double> > native2d(Local<Array> arr) {
   int cc = Local<Array>::Cast(arr->Get(0))->Length(), rc = arr->Length();
-  std::cout << "Wrapping from v8 to native, rc:" << rc << " cc: " << cc << std::endl;
+  // std::cout << "Wrapping from v8 to native, rc:" << rc << " cc: " << cc << std::endl;
   vector<vector<double> > array;
   array.resize(rc);
   for (int i = 0; i < rc; ++i) {
@@ -126,14 +126,10 @@ vector<vector<double> > resize(vector<vector<double> > input, int size) {
 }
 
 double determinant(vector<vector<double> > input, int n) {
-  std::cout << "Call to determinant, n:" << n << std::endl;
-  std::cout << input[0][0] << ":" << input[0][1] << std::endl;
-  std::cout << input[1][0] << ":" << input[1][1] << std::endl;
+  // std::cout << "Call to determinant, n:" << n << std::endl;
+  // std::cout << input[0][0] << ":" << input[0][1] << std::endl;
+  // std::cout << input[1][0] << ":" << input[1][1] << std::endl;
   if (n == 1) return input[0][0];
-  if (n == 2) {
-    double det = input[0][0] * input[1][1] - input[0][1] * input[1][0];
-    std::cout << "Det (2): " << det << std::endl;
-  }
 
   double det = 0;
 
@@ -146,7 +142,7 @@ double determinant(vector<vector<double> > input, int n) {
     double dett = determinant(cofactors, n - 1);
     double preterm = input[0][f] * dett;
     double term = preterm == 0 || preterm == -0 ? 0 : sign * preterm;
-    std::cout << "Contributing term: " << term << " Input " << input[0][f] << " Det " << dett << std::endl;
+    // std::cout << "Contributing term: " << term << " Input " << input[0][f] << " Det " << dett << std::endl;
     det += term;
     sign = -sign;
   }
@@ -155,7 +151,7 @@ double determinant(vector<vector<double> > input, int n) {
 }
 
 vector<vector<double> > adjoint(vector<vector<double> > input) {
-  std::cout << "Call to adjoint" << std::endl;
+  // std::cout << "Call to adjoint" << std::endl;
   vector<vector<double> > adj;
   int N = input.size();
   adj = resize(adj, N);
@@ -188,7 +184,7 @@ vector<vector<double> > inverse(vector<vector<double> > input) {
   vector<vector<double> > inverse;
   int N = input.size();
   inverse = resize(inverse, N);
-  int det = determinant(input, N);
+  double det = determinant(input, N);
   if (det == 0) {
     std::cout << "Singular matrix, can't find its inverse" << std::endl;
     return inverse;
@@ -206,11 +202,13 @@ vector<vector<double> > inverse(vector<vector<double> > input) {
 
 vector<vector<double> > to_exp_length_mat(vector<vector<double> > input) {
   vector<vector<double> > result;
-  int N = input.size();
+  int N = input.size() - 1;
   result = resize(result, N);
   for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
-      result[i][j] = input[i][j];
+      if (j != N) result[i][j] = input[i][j];
+      else result[i][j] = 0;
+
       if (i == j) {
         double preterm = result[i][j] - 1;
         result[j][i] = preterm == 0 || preterm == -0 ? 0 : preterm;
@@ -229,7 +227,7 @@ vector<vector<double> > inv_exp_length_mat(vector<vector<double> > input) {
 Local<Array> wrap2d(vector<vector<double> > a) {
   Isolate* isolate = Isolate::GetCurrent();
   int rc = a.size(), cc = a[0].size();
-  std::cout << "Wrapping from native to v8, rc:" << rc << " cc: " << cc << std::endl;
+  // std::cout << "Wrapping from native to v8, rc:" << rc << " cc: " << cc << std::endl;
   Local<Array> temp, array = Array::New(isolate, rc);
   for (int i = 0; i < rc; ++i) {
     temp = Array::New(isolate, cc);
