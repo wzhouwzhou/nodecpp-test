@@ -222,6 +222,21 @@ vector<vector<double> > inv_exp_length_mat(vector<vector<double> > input) {
   return inverse(to_exp_length_mat(input));
 }
 
+Local<Array> v8transpose(Local<Array> input) {
+  Isolate* isolate = Isolate::GetCurrent();
+  int c1 = Local<Array>::Cast(input->Get(0))->Length(), r1 = input->Length();
+  Local<Array> temp, out = Array::New(isolate, c1);
+  for (int i = 0; i < c1; ++i) {
+    temp = Array::New(isolate, r1);
+    for (int j = 0; j < r1; ++j) {
+      temp->Set(Number::New(isolate, j), Local<Array>::Cast(input->Get(j))->Get(i));
+    }
+    out->Set(Number::New(isolate, i), temp);
+  }
+  return out;
+}
+
+
 vector<vector<double> > transpose(vector<vector<double> > input) {
   vector<vector<double> > out;
   int N = input.size();
@@ -287,7 +302,7 @@ Local<Array> nativeinverse(Local<Array> arr) {
 }
 
 Local<Array> wrapped_transpose(Local<Array> arr) {
-  return wrap2d(transpose(native2d(arr)));
+  return v8transpose(arr);
 }
 
 //inv_exp_length_mat
