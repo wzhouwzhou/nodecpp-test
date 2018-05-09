@@ -224,11 +224,13 @@ vector<vector<double> > inv_exp_length_mat(vector<vector<double> > input) {
 
 vector<vector<double> > transpose(vector<vector<double> > input) {
   vector<vector<double> > out;
-  unsigned long N = input.size();
+  int N = input.size();
+
   out.resize(input[0].size());
-  for (unsigned long i = 0; i < input[i].size(); ++i) {
+
+  for (int i = 0; i < (int) input[0].size(); ++i) {
     out[i].resize(N);
-    for (unsigned long j = 0; j < N; ++j) {
+    for (int j = 0; j < N; ++j) {
       out[i][j] = input[j][i];
     }
   }
