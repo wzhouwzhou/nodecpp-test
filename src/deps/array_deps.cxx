@@ -222,7 +222,7 @@ vector<vector<double> > inv_exp_length_mat(vector<vector<double> > input) {
   return inverse(to_exp_length_mat(input));
 }
 
-vector<vector<double> > transpose(const vector<vector<double> >& input) {
+vector<vector<double> > transpose(vector<vector<double> > input) {
   vector<vector<double> > out;
   unsigned long N = input.size();
   out.resize(input[0].size());
