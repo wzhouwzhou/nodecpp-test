@@ -13,12 +13,14 @@ class ArrayUtil : public node::ObjectWrap {
   static void Init(v8::Local<v8::Object> exports);
   static void Shuffle(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void Sample(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void Transpose(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void SumAll(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void Dot(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void DotExp(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void DotExpNative(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void InverseNative(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void WrappedInvExpLengthMat(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void WrappedToSteadyStateMat(const v8::FunctionCallbackInfo<v8::Value>& args);
  private:
   explicit ArrayUtil(bool safe);
   ~ArrayUtil();

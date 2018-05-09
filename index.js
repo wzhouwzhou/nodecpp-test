@@ -23,6 +23,10 @@ Object.defineProperties(ArrayUtil, {
     value: AU_default.shuffle.bind(this && this.constructor === ArrayUtil ? this : AU_default),
     enumerable: !0,
   },
+  'transpose': {
+    value: AU_default.transpose.bind(this && this.constructor === ArrayUtil ? this : AU_default),
+    enumerable: !0,
+  },
   'sumAll': {
     value: AU_default.sumAll.bind(this && this.constructor === ArrayUtil ? this : AU_default),
     enumerable: !0,
@@ -66,6 +70,15 @@ Object.defineProperties(ArrayUtil, {
     value: (...args) => {
       M.set();
       const v = AU_default.wrapped_inv_exp_length_mat.bind(this && this.constructor === ArrayUtil ? this : AU_default)(...args);
+      console.log(M.report());
+      return v;
+    },
+    enumerable: !0,
+  },
+  'wrapped_to_steady_state_mat': {
+    value: (...args) => {
+      M.set();
+      const v = AU_default.wrapped_to_steady_state_mat.bind(this && this.constructor === ArrayUtil ? this : AU_default)(...args);
       console.log(M.report());
       return v;
     },

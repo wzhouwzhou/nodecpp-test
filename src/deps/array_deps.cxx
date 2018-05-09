@@ -222,6 +222,29 @@ vector<vector<double> > inv_exp_length_mat(vector<vector<double> > input) {
   return inverse(to_exp_length_mat(input));
 }
 
+vector<vector<double> > transpose(const vector<vector<double> >& input) {
+  vector<vector<double> > out;
+  int N = input.size();
+  out = resize(out, N);
+  for (int i = 0; i < N; ++i) {
+    for (unsigned long j = 0; j < input[i].size(); ++j) {
+      out[j][i] = input[i][j];
+    }
+  }
+  return out;
+}
+
+vector<vector<double> > to_steady_state_mat(vector<vector<double> > input) {
+  vector<vector<double> > sp;
+  sp = transpose(input);
+  for (unsigned long i = 0; i < input.size(); ++i) sp[i][i] -= 1.;
+
+  int last_row = sp.size() - 1;
+  for (unsigned long i = 0; i < sp[last_row].size(); ++i) sp[last_row][i] = 1;
+
+  return sp;
+}
+
 //\\===================================================================================================\\//
 
 Local<Array> wrap2d(vector<vector<double> > a) {
@@ -260,6 +283,10 @@ Local<Array> nativeinverse(Local<Array> arr) {
   return wrap2d(inverse(native2d(arr)));
 }
 
+Local<Array> wrapped_transpose(Local<Array> arr) {
+  return wrap2d(transpose(native2d(arr)));
+}
+
 //inv_exp_length_mat
 Local<Array> wrapped_inv_exp_length_mat(Local<Array> arr) {
   return wrap2d(inv_exp_length_mat(native2d(arr)));
@@ -267,4 +294,9 @@ Local<Array> wrapped_inv_exp_length_mat(Local<Array> arr) {
 
 Local<Array> native_export_dot(Local<Array> arr1, Local<Array> arr2) {
   return wrap2d(nativeDot(native2d(arr1), native2d(arr2)));
+}
+
+//to_steady_state_mat
+Local<Array> wrapped_to_steady_state_mat(Local<Array> arr) {
+  return wrap2d(to_steady_state_mat(native2d(arr)));
 }

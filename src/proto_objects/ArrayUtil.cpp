@@ -39,6 +39,8 @@ void ArrayUtil::Init(Local<Object> exports) {
   NODE_SET_PROTOTYPE_METHOD(tpl, "nativedotexp", DotExpNative);
   NODE_SET_PROTOTYPE_METHOD(tpl, "nativeinverse", InverseNative);
   NODE_SET_PROTOTYPE_METHOD(tpl, "wrapped_inv_exp_length_mat", WrappedInvExpLengthMat);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "transpose", Transpose);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "wrapped_to_steady_state_mat", WrappedToSteadyStateMat);
   // NODE_SET_STATIC_METHOD(tpl, "ssample", Sample);
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "ArrayUtil"), tpl->GetFunction());
@@ -114,6 +116,11 @@ void ArrayUtil::DotExpNative(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(nativedotexp(array, power));
 }
 
+void ArrayUtil::Transpose(const FunctionCallbackInfo<Value>& args) {
+  Local<Array> array = Local<Array>::Cast(args[0]);
+  args.GetReturnValue().Set(wrapped_transpose(array));
+}
+
 void ArrayUtil::InverseNative(const FunctionCallbackInfo<Value>& args) {
   Local<Array> array = Local<Array>::Cast(args[0]);
   args.GetReturnValue().Set(nativeinverse(array));
@@ -122,6 +129,11 @@ void ArrayUtil::InverseNative(const FunctionCallbackInfo<Value>& args) {
 void ArrayUtil::WrappedInvExpLengthMat(const FunctionCallbackInfo<Value>& args) {
   Local<Array> array = Local<Array>::Cast(args[0]);
   args.GetReturnValue().Set(wrapped_inv_exp_length_mat(array));
+}
+
+void ArrayUtil::WrappedToSteadyStateMat(const FunctionCallbackInfo<Value>& args) {
+  Local<Array> array = Local<Array>::Cast(args[0]);
+  args.GetReturnValue().Set(wrapped_to_steady_state_mat(array));
 }
 
 }  // namespace arrays
