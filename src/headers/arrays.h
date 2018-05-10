@@ -14,4 +14,5 @@ v8::Local<v8::Array> nativeinverse(v8::Local<v8::Array> arr);
 v8::Local<v8::Array> wrapped_transpose(v8::Local<v8::Array> arr);
 v8::Local<v8::Array> wrapped_inv_exp_length_mat(v8::Local<v8::Array> arr);
 v8::Local<v8::Array> wrapped_to_steady_state_mat(v8::Local<v8::Array> arr);
+v8::Local<v8::Array> get_prob_mat(v8::Local<v8::Array> jumps, int spinner, int rows, int cols);
 #endif

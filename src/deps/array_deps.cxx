@@ -2,6 +2,7 @@
 #include <random>
 #include <iostream>
 #include <vector>
+#include <set>
 
 using v8::Local;
 using v8::Array;
@@ -12,6 +13,8 @@ using std::random_device;
 using std::mt19937;
 using std::uniform_int_distribution;
 using std::vector;
+using std::pair;
+using std::set;
 
 Local<Array> shuffle(Local<Array> arr, bool b = true) {
   random_device rd;
@@ -263,6 +266,74 @@ vector<vector<double> > to_steady_state_mat(vector<vector<double> > input) {
   return sp;
 }
 
+void print_array(const vector<vector<double> >& v) {
+  for (unsigned long i = 0; i < v.size(); ++i) {
+    for (unsigned long j = 0; j < v[i].size(); ++j) {
+      std::cout << v[i][j] << "|";
+    }
+    std::cout << std::endl;
+  }
+}
+
+vector<vector<double> > get_prob_mat_from_jump(vector<vector<double> > doublejumps, int spinner, int rows, int cols) {
+  vector<pair<int, int> > jumps;
+  jumps.resize(doublejumps.size());
+  // std::cout << "Resized board ... Spinner " << spinner << " rows " << rows << " cols " << cols << std::endl;
+  for(unsigned long i = 0; i < doublejumps.size(); ++i) {
+    jumps[i].first = (int) doublejumps[i][0];
+    jumps[i].second = (int) doublejumps[i][1];
+  }
+  // std::cout << "creating board" << std::endl;
+  vector<vector<double> > board;
+  int squares = rows * cols;
+  board = resize(board, squares);
+  
+  for (int i = 0; i < squares; ++i) {
+    for (int j = 0; j < squares; ++j) {
+      board[i][j] = 0.;
+    }
+  }
+  // std::cout << "Set all values in board to 0" << std::endl;
+
+  double default_rate = 1. / spinner;
+
+  for (int i = 0; i < squares - 1; ++i) {
+    for (int j = i + 1; j < i + 1 + spinner; ++j) {
+      if (j >= squares) board[i][i] += default_rate;
+      else board[i][j] = default_rate;
+    }
+  }
+  board[squares - 1][0] = 1.;
+  // print_array(board);
+  // std::cout << "Set all values in board to default rate" << std::endl;
+
+  set<int> empty_pos;
+  for (unsigned long i = 0; i < jumps.size(); ++i) {
+    int start = jumps[i].first;
+    int end = jumps[i].second;
+    for (int j = 0; j < squares; ++j) {
+      if (board[j][start] > 0) {
+        board[j][end] += board[j][start];
+        board[j][start] = 0.;
+      }
+    }
+    empty_pos.insert(start);
+  }
+  // std::cout << "Move jumps" << std::endl;
+  set<int>::reverse_iterator ritr = empty_pos.rbegin();
+  for(; ritr != empty_pos.rend(); ++ritr) {
+    for(int i = 0; i < squares; ++i) {
+      board[i].erase(board[i].begin() + *ritr);
+    }
+  }
+  // std::cout << "Erased col" << std::endl;
+  for (ritr = empty_pos.rbegin(); ritr != empty_pos.rend(); ++ritr) {
+    board.erase(board.begin() + *ritr);
+  }
+  // std::cout << "Erased row" << std::endl;
+  return board;
+}
+
 //\\===================================================================================================\\//
 
 Local<Array> wrap2d(vector<vector<double> > a) {
@@ -317,4 +388,8 @@ Local<Array> native_export_dot(Local<Array> arr1, Local<Array> arr2) {
 //to_steady_state_mat
 Local<Array> wrapped_to_steady_state_mat(Local<Array> arr) {
   return wrap2d(to_steady_state_mat(native2d(arr)));
+}
+
+Local<Array> get_prob_mat(Local<Array> jumps, int spinner, int rows, int cols) {
+  return wrap2d(get_prob_mat_from_jump(native2d(jumps), spinner, rows, cols));
 }

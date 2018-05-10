@@ -41,6 +41,7 @@ void ArrayUtil::Init(Local<Object> exports) {
   NODE_SET_PROTOTYPE_METHOD(tpl, "wrapped_inv_exp_length_mat", WrappedInvExpLengthMat);
   NODE_SET_PROTOTYPE_METHOD(tpl, "transpose", Transpose);
   NODE_SET_PROTOTYPE_METHOD(tpl, "wrapped_to_steady_state_mat", WrappedToSteadyStateMat);
+  NODE_SET_PROTOTYPE_METHOD(tpl, "get_prob_mat", GetProbMat);
   // NODE_SET_STATIC_METHOD(tpl, "ssample", Sample);
   constructor.Reset(isolate, tpl->GetFunction());
   exports->Set(String::NewFromUtf8(isolate, "ArrayUtil"), tpl->GetFunction());
@@ -134,6 +135,14 @@ void ArrayUtil::WrappedInvExpLengthMat(const FunctionCallbackInfo<Value>& args) 
 void ArrayUtil::WrappedToSteadyStateMat(const FunctionCallbackInfo<Value>& args) {
   Local<Array> array = Local<Array>::Cast(args[0]);
   args.GetReturnValue().Set(wrapped_to_steady_state_mat(array));
+}
+
+void ArrayUtil::GetProbMat(const FunctionCallbackInfo<Value>& args) {
+  Local<Array> jumps = Local<Array>::Cast(args[0]);
+  int spinner = args[1]->Int32Value();
+  int rows = args[2]->Int32Value();
+  int cols = args[3]->Int32Value();
+  args.GetReturnValue().Set(get_prob_mat(jumps, spinner, rows, cols));
 }
 
 }  // namespace arrays

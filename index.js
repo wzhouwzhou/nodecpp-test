@@ -84,6 +84,10 @@ Object.defineProperties(ArrayUtil, {
     },
     enumerable: !0,
   },
+  'get_prob_mat': {
+    value: AU_default.get_prob_mat.bind(this && this.constructor === ArrayUtil ? this : AU_default),
+    enumerable: !0,
+  },
 });
 
 Object.defineProperty(exports, 'ArrayUtil', { value: ArrayUtil });

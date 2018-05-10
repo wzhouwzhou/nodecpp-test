@@ -21,6 +21,7 @@ class ArrayUtil : public node::ObjectWrap {
   static void InverseNative(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void WrappedInvExpLengthMat(const v8::FunctionCallbackInfo<v8::Value>& args);
   static void WrappedToSteadyStateMat(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void GetProbMat(const v8::FunctionCallbackInfo<v8::Value>& args);
  private:
   explicit ArrayUtil(bool safe);
   ~ArrayUtil();
